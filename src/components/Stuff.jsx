@@ -6,14 +6,12 @@ import { connectAsync } from 'iguazu';
 import {
   loadCollection,
   queryCollection,
-  queryResource,
 } from 'iguazu-rest';
 import Shade from './Shade';
-import { loadDogs } from '../core/reducers/dogs';
 import { setCount } from '../core/reducers/app';
+import DogsView from './DogsView';
 
 const Stuff = ({
-  dogs,
   nicholas,
   isLoading,
   loadedWithErrors,
@@ -33,24 +31,14 @@ const Stuff = ({
 
   const { count } = useSelector((state) => state.app);
 
+  const [dogsSegmentCount, setDogsSegmentCount] = useState(1);
   const headerCount = mode === 'nicholas'
     ? count
-    : dogs.count;
+    : dogsSegmentCount * 25;
+
   const headerContent = mode === 'nicholas'
     ? 'Shades of Nicholas Feitel'
     : 'Random Dogs';
-
-  // const { isLoading: isLoadingNicholas, data } = useSelector((state) => state.shadesOfNicholas);
-  // const {
-  //   isLoading: isLoadingDogs,
-  //   data: {
-  //     message: dogUrls,
-  //   },
-  // } = useSelector((state) => state.dogs);
-
-  // useEffect(() => {
-  //   dispatch(loadShadesOfNicholas(count));
-  // }, []);
 
   const loadSomeShades = () => {
     setMode('nicholas');
@@ -65,14 +53,11 @@ const Stuff = ({
     }));
   };
 
-  const loadSomeDogs = () => {
-    setMode('dogs');
-    dispatch(loadDogs(count));
-  };
+  const loadSomeDogs = () => { setMode('dogs'); };
 
   if (loadedWithErrors()) { return (<h1>Something went wrong</h1>); }
 
-  return (
+  return mode === 'nicholas' ? (
     <Fragment>
       <div className="row mt-4">
         <div className="col-12">
@@ -113,71 +98,32 @@ const Stuff = ({
             </div>
           </Sticky>
         </div>
-        {isLoading() ? (<Spinner />) : (
-          <Fragment>
-            {mode === 'nicholas' ? (
-              <div className="col-4">
-                <div className="offset-4" />
-                {nicholas.map((thingAboutNicholas) => (
-                  <Shade
-                    label={thingAboutNicholas.label}
-                    key={thingAboutNicholas.id}
-                    hueRotate={thingAboutNicholas.hueRotate}
-                    saturate={thingAboutNicholas.saturate}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="col-4">
-                <div className="offset-4" />
-                {dogs.data.map((dogUrl) => (
-                  <div className="row mb-4" key={dogUrl}>
-                    <div className="card">
-                      <div className="card-body">
-                        <img src={dogUrl} width="100%" alt={dogUrl} />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </Fragment>
-        )}
-        {/* {mode === 'nicholas' ? (
-          <Fragment>
-            {isLoadingNicholas ? (<Spinner />) : (
-              <div className="col-4">
-                <div className="offset-4" />
-                {data.map((thingAboutNicholas) => (
-                  <Shade
-                    label={thingAboutNicholas.label}
-                    key={thingAboutNicholas.id}
-                    hueRotate={thingAboutNicholas.hueRotate}
-                    saturate={thingAboutNicholas.saturate}
-                  />
-                ))}
-              </div>
-            )}
-          </Fragment>
-        ) : (
-          <Fragment>
-            {isLoadingDogs ? (<Spinner />) : (
-              <div className="col-4">
-                <div className="offset-4" />
-                {dogUrls.map((dogUrl) => (
-                  <div className="row mb-4" key={dogUrl}>
-                    <div className="card">
-                      <div className="card-body">
-                        <img src={dogUrl} width="100%" alt={dogUrl} />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </Fragment>
-        )} */}
+        <Fragment>
+          {isLoading() ? (<Spinner />) : (
+            <div className="col-4">
+              <div className="offset-4" />
+              {nicholas.map((thingAboutNicholas) => (
+                <Shade
+                  label={thingAboutNicholas.label}
+                  key={thingAboutNicholas.id}
+                  hueRotate={thingAboutNicholas.hueRotate}
+                  saturate={thingAboutNicholas.saturate}
+                />
+              ))}
+            </div>
+          )}
+        </Fragment>
       </div>
+    </Fragment>
+  ) : (
+    <Fragment>
+      <DogsView
+        dogsSegmentCount={dogsSegmentCount}
+        headerContent={headerContent}
+        headerCount={headerCount}
+        loadSomeShades={loadSomeShades}
+        setDogsSegmentCount={setDogsSegmentCount}
+      />
     </Fragment>
   );
 };
@@ -196,10 +142,6 @@ export const loadDataAsProps = ({ store: { dispatch, getState } }) => {
           count,
         },
       },
-    })),
-    dogs: () => dispatch(queryResource({
-      resource: 'dogs',
-      id: count,
     })),
   };
 };
