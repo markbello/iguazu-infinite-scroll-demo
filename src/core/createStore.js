@@ -11,6 +11,7 @@ import thunk from 'redux-thunk';
 import regeneratorRuntime from 'regenerator-runtime';
 import shadesOfNicholas from './reducers/shadesOfNicholas';
 import dogs from './reducers/dogs';
+import app from './reducers/app';
 import resources from './resources';
 
 configureIguazuREST({
@@ -18,7 +19,6 @@ configureIguazuREST({
   defaultOpts: {
     headers: {
       Accept: 'application/json',
-      'Access-Control-Allow-Origin': 'http://localhost:4000',
       'Content-Type': 'application/json',
     },
   },
@@ -28,6 +28,7 @@ const createStore = () => reduxCreateStore(combineReducers({
   resources: resourcesReducer,
   shadesOfNicholas,
   dogs,
+  app,
 }), composeWithDevTools(
   applyMiddleware(thunk)
 ));

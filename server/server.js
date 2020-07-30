@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 const nicholasRouter = require('./routes/nicholas');
+const dogsRouter = require('./routes/dogs');
 
 const PORT = process.env.PORT || 4000;
 
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV && process.env.NODE_ENV !== 'development') {
 }
 
 app.use('/nicholas', nicholasRouter);
+app.use('/dogs', dogsRouter);
 
 app.use((err, req, res) => {
   console.error(err.stack);
