@@ -28,7 +28,7 @@
     "helmet": "^3.23.3",
     "iguazu": "^3.0.2",
     "iguazu-rest": "^1.9.1",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "nodemon": "^2.0.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
