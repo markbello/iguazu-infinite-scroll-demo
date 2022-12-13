@@ -24,7 +24,7 @@
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",
     "emotion-theming": "^10.0.27",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "helmet": "^3.23.3",
     "iguazu": "^3.0.2",
     "iguazu-rest": "^1.9.1",
